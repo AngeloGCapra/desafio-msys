@@ -3,6 +3,7 @@ package br.com.msys.desafio.controller;
 import br.com.msys.desafio.dto.UsuarioResponse;
 import br.com.msys.desafio.dto.UsuarioUpdateRequest;
 import br.com.msys.desafio.service.UsuarioService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/usuarios")
+@SecurityRequirement(name = "bearerAuth")
 public class UsuarioController {
 
     private final UsuarioService service;
