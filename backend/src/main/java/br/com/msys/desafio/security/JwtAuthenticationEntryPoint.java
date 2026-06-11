@@ -25,14 +25,13 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     }
 
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response,
-                         AuthenticationException authException) throws IOException {
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         ApiError body = ApiError.of(
                 HttpStatus.UNAUTHORIZED.value(),
                 HttpStatus.UNAUTHORIZED.getReasonPhrase(),
-                "Autenticacao necessaria ou token invalido",
+                "Autenticação necessaria ou token invalido",
                 request.getRequestURI());
         objectMapper.writeValue(response.getWriter(), body);
     }
