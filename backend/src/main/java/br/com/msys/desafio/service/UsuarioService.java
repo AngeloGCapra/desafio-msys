@@ -1,0 +1,74 @@
+package br.com.msys.desafio.service;
+
+import br.com.msys.desafio.dto.UsuarioRequest;
+import br.com.msys.desafio.dto.UsuarioResponse;
+import br.com.msys.desafio.dto.UsuarioUpdateRequest;
+import br.com.msys.desafio.entity.Usuario;
+import br.com.msys.desafio.exception.EmailJaCadastradoException;
+import br.com.msys.desafio.exception.UsuarioNaoEncontradoException;
+import br.com.msys.desafio.repository.UsuarioRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service
+public class UsuarioService {
+
+    private final UsuarioRepository repository;
+    private final PasswordEncoder passwordEncoder;
+
+    public UsuarioService(UsuarioRepository repository, PasswordEncoder passwordEncoder) {
+        this.repository = repository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @Transactional(readOnly = true)
+    public List<UsuarioResponse> listar() {
+        return repository.findAll().stream().map(UsuarioResponse::from).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public UsuarioResponse buscarPorId(Integer id) {
+        return UsuarioResponse.from(buscarEntidade(id));
+    }
+
+    @Transactional
+    public UsuarioResponse criar(UsuarioRequest request) {
+        if (repository.existsByEmail(request.email())) {
+            throw new EmailJaCadastradoException(request.email());
+        }
+        Usuario usuario = new Usuario();
+        usuario.setNome(request.nome());
+        usuario.setEmail(request.email());
+        usuario.setSenha(passwordEncoder.encode(request.senha()));
+        return UsuarioResponse.from(repository.save(usuario));
+    }
+
+    @Transactional
+    public UsuarioResponse atualizar(Integer id, UsuarioUpdateRequest request) {
+        Usuario usuario = buscarEntidade(id);
+        if (repository.existsByEmailAndIdNot(request.email(), id)) {
+            throw new EmailJaCadastradoException(request.email());
+        }
+        usuario.setNome(request.nome());
+        usuario.setEmail(request.email());
+        if (request.senha() != null) {
+            usuario.setSenha(passwordEncoder.encode(request.senha()));
+        }
+        return UsuarioResponse.from(repository.save(usuario));
+    }
+
+    @Transactional
+    public void excluir(Integer id) {
+        Usuario usuario = buscarEntidade(id);
+        repository.delete(usuario);
+    }
+
+    private Usuario buscarEntidade(Integer id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new UsuarioNaoEncontradoException(id));
+    }
+
+}

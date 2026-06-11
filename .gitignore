@@ -25,7 +25,8 @@ replay_pid*
 
 # Maven / build
 backend/target/
-.mvn/wrapper/maven-wrapper.jar
+# Exceção: o Maven Wrapper jar deve ser versionado (sobrepõe o *.jar acima)
+!backend/.mvn/wrapper/maven-wrapper.jar
 
 # IDE
 .idea/
