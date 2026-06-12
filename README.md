@@ -2,13 +2,19 @@
 
 Implementação do teste técnico da **Microsys**: aplicação de **CRUD de usuários** (cadastro, listagem, edição e exclusão), com back-end em **Java / Spring Boot** e front-end **SPA em React**.
 
-## Visão geral
+## Arquitetura
 
-- **Arquitetura:** monorepo com `backend/` e `frontend/` desacoplados, comunicando por API REST; banco PostgreSQL. Back-end em camadas (controller → service → repository); front-end separado em `services`, `hooks`, `pages` e `components`.
+**Full-Stack Monorepo com Arquitetura em Camadas.** Back-end e front-end vivem em pastas
+independentes e conversam por uma API REST. O back-end organiza o fluxo em camadas
+(controller → service → repository → entidade JPA), com a segurança isolada em filtros/JWT e
+os erros centralizados num `GlobalExceptionHandler`. O front-end espelha essa separação de
+responsabilidades: `services` (HTTP), `hooks` (estado), `pages` (telas) e `components` (UI).
+
 - **Back-end:** API REST em Java 21 + Spring Boot 3.5, Spring Data JPA, PostgreSQL, senha com **BCrypt** e rotas protegidas por **JWT** (fluxo Registro → Login → token). Erros padronizados por um `GlobalExceptionHandler` e API documentada via **Swagger**.
 - **Front-end:** React 19 + TypeScript + Vite, Tailwind CSS e React Hook Form. Instância Axios central com interceptors (injeta o token; trata 401), rotas protegidas e validação declarativa de formulários.
 - **Banco:** PostgreSQL 16, tabela `usuarios` (`id` INT4, `email` único).
-- **Padrões:** DTOs nas bordas (a senha nunca é retornada), segredos só via variáveis de ambiente, **Docker Compose** com build multi-stage e histórico de commits granulares (Conventional Commits).
+- **Design:** injeção de dependência **por construtor** (favorece testabilidade e inversão de dependência), **responsabilidade única por camada**, **DTOs isolando a entidade** nas bordas (a senha nunca é exposta) e repository como **interface Spring Data JPA**.
+- **Infra:** **Docker Compose** com build multi-stage e histórico de commits granulares (Conventional Commits); segredos apenas via variáveis de ambiente.
 
 ## Funcionalidades
 
