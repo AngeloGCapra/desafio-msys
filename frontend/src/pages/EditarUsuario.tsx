@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Loader2 } from 'lucide-react';
+import { Loader2, UserPen } from 'lucide-react';
 import { useToast } from '../hooks/useToast';
 import { getErrorMessage } from '../services/api';
 import * as usuarioService from '../services/usuarioService';
@@ -61,7 +61,10 @@ export default function EditarUsuario() {
   return (
     <Layout>
       <div className="animate-fade-in mx-auto max-w-md rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-        <h2 className="mb-6 text-xl font-semibold text-gray-800">Editar usuario</h2>
+        <h2 className="mb-6 flex items-center gap-2 text-xl font-semibold text-gray-800">
+          <UserPen size={20} className="text-indigo-600" aria-hidden />
+          Editar usuario
+        </h2>
 
         {loading ? (
           <div className="flex items-center gap-2 text-gray-500">

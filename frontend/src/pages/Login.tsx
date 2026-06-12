@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
+import { LogIn } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { getErrorMessage } from '../services/api';
 import AuthLayout from '../components/AuthLayout';
@@ -36,7 +37,7 @@ export default function Login() {
   };
 
   return (
-    <AuthLayout title="Entrar">
+    <AuthLayout title="Entrar" icon={<LogIn size={24} aria-hidden />}>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4" noValidate>
         {erro && <Alert message={erro} />}
         <TextField

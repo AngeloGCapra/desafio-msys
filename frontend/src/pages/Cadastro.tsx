@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
+import { UserPlus } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { getErrorMessage } from '../services/api';
 import AuthLayout from '../components/AuthLayout';
@@ -37,7 +38,7 @@ export default function Cadastro() {
   };
 
   return (
-    <AuthLayout title="Criar conta">
+    <AuthLayout title="Criar conta" icon={<UserPlus size={24} aria-hidden />}>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4" noValidate>
         {erro && <Alert message={erro} />}
         <TextField
