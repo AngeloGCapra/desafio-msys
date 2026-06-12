@@ -4,8 +4,6 @@ import br.com.msys.desafio.dto.AuthResponse;
 import br.com.msys.desafio.dto.LoginRequest;
 import br.com.msys.desafio.dto.UsuarioRequest;
 import br.com.msys.desafio.dto.UsuarioResponse;
-import br.com.msys.desafio.entity.Usuario;
-import br.com.msys.desafio.repository.UsuarioRepository;
 import br.com.msys.desafio.security.JwtService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,8 +13,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
-
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -32,16 +28,13 @@ class AuthServiceTest {
     private UsuarioService usuarioService;
 
     @Mock
-    private UsuarioRepository usuarioRepository;
-
-    @Mock
     private AuthenticationManager authenticationManager;
 
     @Mock
     private JwtService jwtService;
 
     @InjectMocks
-    private AuthService authService;
+    private AuthServiceImpl authService;
 
     @Test
     void register_deveCriarUsuarioEGerarToken() {
@@ -61,8 +54,8 @@ class AuthServiceTest {
     @Test
     void login_comCredenciaisValidas_deveGerarToken() {
         when(authenticationManager.authenticate(any())).thenReturn(mockAuth());
-        when(usuarioRepository.findByEmail("ana@exemplo.com"))
-                .thenReturn(Optional.of(new Usuario(1, "Ana", "ana@exemplo.com", "hash")));
+        when(usuarioService.buscarPorEmail("ana@exemplo.com"))
+                .thenReturn(new UsuarioResponse(1, "Ana", "ana@exemplo.com"));
         when(jwtService.generateToken(1)).thenReturn("tok");
         when(jwtService.getExpiration()).thenReturn(3600000L);
 

@@ -35,7 +35,7 @@ class UsuarioServiceTest {
     private PasswordEncoder passwordEncoder;
 
     @InjectMocks
-    private UsuarioService service;
+    private UsuarioServiceImpl service;
 
     private Usuario usuarioExistente() {
         return new Usuario(1, "Ana", "ana@exemplo.com", "hash-antigo");
@@ -141,6 +141,25 @@ class UsuarioServiceTest {
         when(repository.findById(99)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> service.excluir(99))
+                .isInstanceOf(UsuarioNaoEncontradoException.class);
+    }
+
+    @Test
+    void buscarPorEmail_existente_deveRetornarResponse() {
+        when(repository.findByEmail("ana@exemplo.com"))
+                .thenReturn(Optional.of(new Usuario(1, "Ana", "ana@exemplo.com", "hash")));
+
+        UsuarioResponse response = service.buscarPorEmail("ana@exemplo.com");
+
+        assertThat(response.id()).isEqualTo(1);
+        assertThat(response.email()).isEqualTo("ana@exemplo.com");
+    }
+
+    @Test
+    void buscarPorEmail_inexistente_deveLancarNaoEncontrado() {
+        when(repository.findByEmail("nao@existe.com")).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> service.buscarPorEmail("nao@existe.com"))
                 .isInstanceOf(UsuarioNaoEncontradoException.class);
     }
 
