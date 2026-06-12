@@ -7,16 +7,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "usuarios")
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Usuario {
 
     @Id
@@ -31,5 +31,14 @@ public class Usuario {
 
     @Column(nullable = false)
     private String senha;
+
+    public void atualizarDados(String nome, String email) {
+        this.nome = nome;
+        this.email = email;
+    }
+
+    public void trocarSenha(String senhaHash) {
+        this.senha = senhaHash;
+    }
 
 }

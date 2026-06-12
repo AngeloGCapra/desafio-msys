@@ -47,8 +47,7 @@ class UsuarioServiceTest {
         when(passwordEncoder.encode("senha123")).thenReturn("hash-novo");
         when(repository.save(any(Usuario.class))).thenAnswer(inv -> {
             Usuario u = inv.getArgument(0);
-            u.setId(1);
-            return u;
+            return new Usuario(1, u.getNome(), u.getEmail(), u.getSenha());
         });
 
         UsuarioResponse response = service.criar(new UsuarioRequest("Ana", "ana@exemplo.com", "senha123"));

@@ -39,10 +39,11 @@ public class UsuarioService {
         if (repository.existsByEmail(request.email())) {
             throw new EmailJaCadastradoException(request.email());
         }
-        Usuario usuario = new Usuario();
-        usuario.setNome(request.nome());
-        usuario.setEmail(request.email());
-        usuario.setSenha(passwordEncoder.encode(request.senha()));
+        Usuario usuario = Usuario.builder()
+                .nome(request.nome())
+                .email(request.email())
+                .senha(passwordEncoder.encode(request.senha()))
+                .build();
         return UsuarioResponse.from(repository.save(usuario));
     }
 
@@ -52,10 +53,9 @@ public class UsuarioService {
         if (repository.existsByEmailAndIdNot(request.email(), id)) {
             throw new EmailJaCadastradoException(request.email());
         }
-        usuario.setNome(request.nome());
-        usuario.setEmail(request.email());
+        usuario.atualizarDados(request.nome(), request.email());
         if (request.senha() != null) {
-            usuario.setSenha(passwordEncoder.encode(request.senha()));
+            usuario.trocarSenha(passwordEncoder.encode(request.senha()));
         }
         return UsuarioResponse.from(repository.save(usuario));
     }
