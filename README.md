@@ -4,9 +4,11 @@ Implementação do teste técnico da **Microsys**: aplicação de **CRUD de usu�
 
 ## Visão geral
 
-- **Back-end:** API REST em Java 21 + Spring Boot 3.5, Spring Data JPA, PostgreSQL, senha com **BCrypt** e rotas protegidas por **JWT** (fluxo Registro → Login → token).
-- **Front-end:** React 19 + TypeScript + Vite, Tailwind CSS e React Hook Form.
-- **Banco:** PostgreSQL 16, tabela `usuarios`.
+- **Arquitetura:** monorepo com `backend/` e `frontend/` desacoplados, comunicando por API REST; banco PostgreSQL. Back-end em camadas (controller → service → repository); front-end separado em `services`, `hooks`, `pages` e `components`.
+- **Back-end:** API REST em Java 21 + Spring Boot 3.5, Spring Data JPA, PostgreSQL, senha com **BCrypt** e rotas protegidas por **JWT** (fluxo Registro → Login → token). Erros padronizados por um `GlobalExceptionHandler` e API documentada via **Swagger**.
+- **Front-end:** React 19 + TypeScript + Vite, Tailwind CSS e React Hook Form. Instância Axios central com interceptors (injeta o token; trata 401), rotas protegidas e validação declarativa de formulários.
+- **Banco:** PostgreSQL 16, tabela `usuarios` (`id` INT4, `email` único).
+- **Padrões:** DTOs nas bordas (a senha nunca é retornada), segredos só via variáveis de ambiente, **Docker Compose** com build multi-stage e histórico de commits granulares (Conventional Commits).
 
 ## Funcionalidades
 
