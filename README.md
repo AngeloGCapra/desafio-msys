@@ -1,12 +1,10 @@
-# desafio-msys
+# Desafio Microsys
 
-Teste técnico da **Microsys**: aplicação de **CRUD de usuários** (cadastro, listagem,
-edição e exclusão), com back-end em **Java / Spring Boot** e front-end **SPA em React**.
+Implementação do teste técnico da **Microsys**: aplicação de **CRUD de usuários** (cadastro, listagem, edição e exclusão), com back-end em **Java / Spring Boot** e front-end **SPA em React**.
 
 ## Visão geral
 
-- **Back-end:** API REST em Java 21 + Spring Boot 3.5, Spring Data JPA, PostgreSQL,
-  senha com **BCrypt** e rotas protegidas por **JWT** (fluxo Registro → Login → token).
+- **Back-end:** API REST em Java 21 + Spring Boot 3.5, Spring Data JPA, PostgreSQL, senha com **BCrypt** e rotas protegidas por **JWT** (fluxo Registro → Login → token).
 - **Front-end:** React 19 + TypeScript + Vite, Tailwind CSS e React Hook Form.
 - **Banco:** PostgreSQL 16, tabela `usuarios`.
 
@@ -29,14 +27,14 @@ desafio-msys/
 
 ## Como rodar
 
-Há **dois caminhos**. Escolha um.
+Há **duas opções**:
 
-### Opção A — Docker (recomendado)
+## Opção A — Docker (recomendado)
 
-Pré-requisito: **Docker Desktop** (Windows/Mac) ou Docker Engine + plugin Compose.
+Pré-requisitos: **Docker Desktop** ou Docker Engine + plugin Compose.
 
 ```bash
-cp .env.example .env        # no Windows (PowerShell): Copy-Item .env.example .env
+cp .env.example .env       # no Windows (PowerShell): Copy-Item .env.example .env
 docker compose up --build
 ```
 
