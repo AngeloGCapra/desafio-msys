@@ -13,7 +13,7 @@ responsabilidades: `services` (HTTP), `hooks` (estado), `pages` (telas) e `compo
 - **Back-end:** API REST em Java 21 + Spring Boot 3.5, Spring Data JPA, PostgreSQL, senha com **BCrypt** e rotas protegidas por **JWT** (fluxo Registro → Login → token). Erros padronizados por um `GlobalExceptionHandler` e API documentada via **Swagger**.
 - **Front-end:** React 19 + TypeScript + Vite, Tailwind CSS e React Hook Form. Instância Axios central com interceptors (injeta o token; trata 401), rotas protegidas e validação declarativa de formulários.
 - **Banco:** PostgreSQL 16, tabela `usuarios` (`id` INT4, `email` único).
-- **Design:** injeção de dependência **por construtor** (favorece testabilidade e inversão de dependência), **responsabilidade única por camada**, **DTOs isolando a entidade** nas bordas (a senha nunca é exposta) e repository como **interface Spring Data JPA**.
+- **Design:** services atrás de **interfaces** (inversão de dependência via injeção por construtor), **mapper dedicado** isolando a conversão entidade ↔ DTO (responsabilidade única), entidade com **métodos de domínio** (sem setters cegos) e **DTOs nas bordas** (a senha nunca é exposta).
 - **Infra:** **Docker Compose** com build multi-stage e histórico de commits granulares (Conventional Commits); segredos apenas via variáveis de ambiente.
 
 ## Funcionalidades
