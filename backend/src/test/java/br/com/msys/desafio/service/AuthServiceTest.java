@@ -4,6 +4,7 @@ import br.com.msys.desafio.dto.AuthResponse;
 import br.com.msys.desafio.dto.LoginRequest;
 import br.com.msys.desafio.dto.UsuarioRequest;
 import br.com.msys.desafio.dto.UsuarioResponse;
+import br.com.msys.desafio.exception.UsuarioNaoEncontradoException;
 import br.com.msys.desafio.security.JwtService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -71,6 +72,18 @@ class AuthServiceTest {
                 .thenThrow(new BadCredentialsException("credenciais invalidas"));
 
         assertThatThrownBy(() -> authService.login(new LoginRequest("ana@exemplo.com", "errada")))
+                .isInstanceOf(BadCredentialsException.class);
+
+        verify(jwtService, never()).generateToken(any());
+    }
+
+    @Test
+    void login_usuarioSomeAposAutenticar_deveLancar401ENaoGerarToken() {
+        when(authenticationManager.authenticate(any())).thenReturn(mockAuth());
+        when(usuarioService.buscarPorEmail("ana@exemplo.com"))
+                .thenThrow(new UsuarioNaoEncontradoException("ana@exemplo.com"));
+
+        assertThatThrownBy(() -> authService.login(new LoginRequest("ana@exemplo.com", "senha123")))
                 .isInstanceOf(BadCredentialsException.class);
 
         verify(jwtService, never()).generateToken(any());
