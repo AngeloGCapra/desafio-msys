@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
+import { Loader2 } from 'lucide-react';
 import { useToast } from '../hooks/useToast';
 import { getErrorMessage } from '../services/api';
 import * as usuarioService from '../services/usuarioService';
@@ -59,11 +60,14 @@ export default function EditarUsuario() {
 
   return (
     <Layout>
-      <div className="mx-auto max-w-md rounded-lg bg-white p-6 shadow-sm">
+      <div className="animate-fade-in mx-auto max-w-md rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
         <h2 className="mb-6 text-xl font-semibold text-gray-800">Editar usuario</h2>
 
         {loading ? (
-          <p className="text-gray-500">Carregando...</p>
+          <div className="flex items-center gap-2 text-gray-500">
+            <Loader2 size={18} className="animate-spin" aria-hidden />
+            Carregando...
+          </div>
         ) : carregarErro ? (
           <div className="flex flex-col gap-4">
             <Alert message={carregarErro} />
@@ -112,7 +116,7 @@ export default function EditarUsuario() {
               <button
                 type="button"
                 onClick={() => navigate('/usuarios')}
-                className="flex-1 rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+                className="flex-1 rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors duration-150 hover:bg-gray-50 active:scale-[.98]"
               >
                 Cancelar
               </button>

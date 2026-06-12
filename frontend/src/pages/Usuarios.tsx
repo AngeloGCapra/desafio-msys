@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Loader2, Pencil, Trash2, Users } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { useToast } from '../hooks/useToast';
 import { getErrorMessage } from '../services/api';
@@ -48,11 +49,17 @@ export default function Usuarios() {
       {error && <Alert message={error} />}
 
       {loading ? (
-        <p className="text-gray-500">Carregando...</p>
+        <div className="flex items-center gap-2 text-gray-500">
+          <Loader2 size={18} className="animate-spin" aria-hidden />
+          Carregando...
+        </div>
       ) : usuarios.length === 0 && !error ? (
-        <p className="text-gray-500">Nenhum usuario cadastrado.</p>
+        <div className="flex flex-col items-center gap-2 rounded-lg border border-dashed border-gray-300 bg-white py-12 text-gray-500">
+          <Users size={32} className="text-gray-400" aria-hidden />
+          Nenhum usuario cadastrado.
+        </div>
       ) : (
-        <div className="overflow-hidden rounded-lg border border-gray-200 bg-white">
+        <div className="animate-fade-in overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
           <table className="w-full text-left text-sm">
             <thead className="bg-gray-50 text-gray-600">
               <tr>
@@ -63,24 +70,28 @@ export default function Usuarios() {
             </thead>
             <tbody className="divide-y divide-gray-100">
               {usuarios.map((u) => (
-                <tr key={u.id}>
-                  <td className="px-4 py-3 text-gray-800">{u.nome}</td>
+                <tr key={u.id} className="transition-colors duration-150 hover:bg-gray-50">
+                  <td className="px-4 py-3 font-medium text-gray-800">{u.nome}</td>
                   <td className="px-4 py-3 text-gray-600">{u.email}</td>
                   <td className="px-4 py-3 text-right">
-                    <button
-                      onClick={() => navigate(`/usuarios/${u.id}/editar`)}
-                      className="font-medium text-indigo-600 hover:underline"
-                    >
-                      Editar
-                    </button>
-                    {u.id !== atual?.id && (
+                    <div className="flex items-center justify-end gap-4">
                       <button
-                        onClick={() => setSelecionado(u)}
-                        className="ml-4 font-medium text-red-600 hover:underline"
+                        onClick={() => navigate(`/usuarios/${u.id}/editar`)}
+                        className="flex items-center gap-1 font-medium text-indigo-600 transition-colors hover:text-indigo-700"
                       >
-                        Excluir
+                        <Pencil size={14} aria-hidden />
+                        Editar
                       </button>
-                    )}
+                      {u.id !== atual?.id && (
+                        <button
+                          onClick={() => setSelecionado(u)}
+                          className="flex items-center gap-1 font-medium text-red-600 transition-colors hover:text-red-700"
+                        >
+                          <Trash2 size={14} aria-hidden />
+                          Excluir
+                        </button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
