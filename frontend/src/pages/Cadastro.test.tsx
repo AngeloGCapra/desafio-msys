@@ -50,6 +50,9 @@ describe('Cadastro', () => {
     await user.click(screen.getByRole('button', { name: /cadastrar/i }));
 
     expect(await screen.findByText('E-mail invalido.')).toBeInTheDocument();
+    // isola que apenas o e-mail falhou (nome e senha validos nao geram erro)
+    expect(screen.queryByText('Informe o nome.')).not.toBeInTheDocument();
+    expect(screen.queryByText('Minimo de 6 caracteres.')).not.toBeInTheDocument();
     expect(mockRegister).not.toHaveBeenCalled();
   });
 
