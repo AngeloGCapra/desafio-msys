@@ -6,11 +6,12 @@ import br.com.msys.desafio.dto.UsuarioUpdateRequest;
 import br.com.msys.desafio.entity.Usuario;
 import br.com.msys.desafio.exception.EmailJaCadastradoException;
 import br.com.msys.desafio.exception.UsuarioNaoEncontradoException;
+import br.com.msys.desafio.mapper.UsuarioMapper;
 import br.com.msys.desafio.repository.UsuarioRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,8 +35,12 @@ class UsuarioServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
-    @InjectMocks
     private UsuarioServiceImpl service;
+
+    @BeforeEach
+    void setUp() {
+        service = new UsuarioServiceImpl(repository, passwordEncoder, new UsuarioMapper());
+    }
 
     private Usuario usuarioExistente() {
         return new Usuario(1, "Ana", "ana@exemplo.com", "hash-antigo");

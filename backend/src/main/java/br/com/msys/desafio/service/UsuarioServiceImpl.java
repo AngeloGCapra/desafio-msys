@@ -6,6 +6,7 @@ import br.com.msys.desafio.dto.UsuarioUpdateRequest;
 import br.com.msys.desafio.entity.Usuario;
 import br.com.msys.desafio.exception.EmailJaCadastradoException;
 import br.com.msys.desafio.exception.UsuarioNaoEncontradoException;
+import br.com.msys.desafio.mapper.UsuarioMapper;
 import br.com.msys.desafio.repository.UsuarioRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,29 +19,32 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     private final UsuarioRepository repository;
     private final PasswordEncoder passwordEncoder;
+    private final UsuarioMapper mapper;
 
-    public UsuarioServiceImpl(UsuarioRepository repository, PasswordEncoder passwordEncoder) {
+    public UsuarioServiceImpl(UsuarioRepository repository, PasswordEncoder passwordEncoder,
+                              UsuarioMapper mapper) {
         this.repository = repository;
         this.passwordEncoder = passwordEncoder;
+        this.mapper = mapper;
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<UsuarioResponse> listar() {
-        return repository.findAll().stream().map(UsuarioResponse::from).toList();
+        return repository.findAll().stream().map(mapper::toResponse).toList();
     }
 
     @Override
     @Transactional(readOnly = true)
     public UsuarioResponse buscarPorId(Integer id) {
-        return UsuarioResponse.from(buscarEntidade(id));
+        return mapper.toResponse(buscarEntidade(id));
     }
 
     @Override
     @Transactional(readOnly = true)
     public UsuarioResponse buscarPorEmail(String email) {
         return repository.findByEmail(email)
-                .map(UsuarioResponse::from)
+                .map(mapper::toResponse)
                 .orElseThrow(() -> new UsuarioNaoEncontradoException(email));
     }
 
@@ -50,12 +54,8 @@ public class UsuarioServiceImpl implements UsuarioService {
         if (repository.existsByEmail(request.email())) {
             throw new EmailJaCadastradoException(request.email());
         }
-        Usuario usuario = Usuario.builder()
-                .nome(request.nome())
-                .email(request.email())
-                .senha(passwordEncoder.encode(request.senha()))
-                .build();
-        return UsuarioResponse.from(repository.save(usuario));
+        Usuario usuario = mapper.toEntity(request, passwordEncoder.encode(request.senha()));
+        return mapper.toResponse(repository.save(usuario));
     }
 
     @Override
@@ -69,7 +69,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         if (request.senha() != null) {
             usuario.trocarSenha(passwordEncoder.encode(request.senha()));
         }
-        return UsuarioResponse.from(repository.save(usuario));
+        return mapper.toResponse(repository.save(usuario));
     }
 
     @Override
