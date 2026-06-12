@@ -3,15 +3,19 @@
 Teste técnico da **Microsys**: aplicação de **CRUD de usuários** (cadastro, listagem,
 edição e exclusão), com back-end em **Java / Spring Boot** e front-end **SPA em React**.
 
-> ⚠️ Projeto em construção — este README descreve a estrutura e como rodar; partes
-> da implementação ainda estão sendo desenvolvidas.
-
 ## Visão geral
 
 - **Back-end:** API REST em Java 21 + Spring Boot 3.5, Spring Data JPA, PostgreSQL,
   senha com **BCrypt** e rotas protegidas por **JWT** (fluxo Registro → Login → token).
 - **Front-end:** React 19 + TypeScript + Vite, Tailwind CSS e React Hook Form.
 - **Banco:** PostgreSQL 16, tabela `usuarios`.
+
+## Funcionalidades
+
+- Cadastro de usuário com validação (nome, e-mail e senha) e login automático.
+- Login com e-mail e senha, emitindo **JWT**; rotas de usuários protegidas pelo token.
+- Listagem, edição (página dedicada, senha opcional) e exclusão (com confirmação).
+- API documentada via **Swagger**; senha sempre em hash, nunca retornada.
 
 ## Estrutura do repositório
 
@@ -64,6 +68,13 @@ npm run dev
 
 Ajuste `VITE_API_URL` (front) e as credenciais do banco (back) conforme seu ambiente —
 ver `.env.example`.
+
+## Testes
+
+```bash
+cd backend && ./mvnw test     # back-end (JUnit + Mockito)
+cd frontend && npm test       # front-end (Vitest + Testing Library)
+```
 
 ## Variáveis de ambiente
 
