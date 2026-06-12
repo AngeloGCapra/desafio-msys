@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useState, type ReactNode } from 'react';
+import { CheckCircle, XCircle } from 'lucide-react';
 
 type ToastVariant = 'success' | 'error';
 
@@ -33,10 +34,15 @@ export function ToastProvider({ children }: { children: ReactNode }) {
           <div
             key={t.id}
             role="status"
-            className={`rounded-md px-4 py-2 text-sm text-white shadow-lg ${
+            className={`animate-slide-up flex items-center gap-2 rounded-md px-4 py-2 text-sm text-white shadow-lg ${
               t.variant === 'success' ? 'bg-green-600' : 'bg-red-600'
             }`}
           >
+            {t.variant === 'success' ? (
+              <CheckCircle size={16} className="shrink-0" aria-hidden />
+            ) : (
+              <XCircle size={16} className="shrink-0" aria-hidden />
+            )}
             {t.message}
           </div>
         ))}

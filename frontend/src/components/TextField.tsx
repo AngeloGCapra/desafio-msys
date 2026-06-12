@@ -14,7 +14,7 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
       <input
         id={id}
         ref={ref}
-        className="rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+        className="rounded-md border border-gray-300 px-3 py-2 text-sm outline-none transition-colors duration-150 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
         {...rest}
       />
       {error && <span className="text-xs text-red-600">{error}</span>}
